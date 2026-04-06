@@ -1,0 +1,171 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BatteryOptima | Model Training</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00FFC6;
+            --secondary: #10b981;
+            --accent: #0ea5e9;
+            --bg-dark: #020617;
+            --glass: rgba(15, 23, 42, 0.7);
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Rajdhani', sans-serif; background: var(--bg-dark); color: #e2e8f0; min-height: 100vh; overflow-x: hidden; }
+
+        /* Background */
+        .bg-layer {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: url("{% static 'images/bg3.jpg' %}") no-repeat center center/cover;
+            filter: brightness(0.2);
+            z-index: -1;
+        }
+
+        .bg-gradient {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to bottom, rgba(2, 6, 23, 0.8), rgba(15, 23, 42, 0.8));
+            z-index: -1;
+        }
+
+        /* Navbar */
+        nav {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 5%;
+            display: flex; justify-content: space-between; align-items: center;
+            position: sticky; top: 0; z-index: 1000;
+        }
+        .logo { font-family: 'Orbitron', sans-serif; font-size: 1.2rem; font-weight: 700; color: var(--primary); text-decoration: none; display: flex; align-items: center; gap: 0.5rem; }
+        .nav-links { display: flex; gap: 1.5rem; }
+        .nav-links a { color: #94a3b8; text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: 0.3s; display: flex; align-items: center; gap: 0.5rem; }
+        .nav-links a:hover, .nav-links a.active { color: var(--primary); }
+
+        /* Main Container */
+        .container { max-width: 1200px; margin: 3rem auto; padding: 0 2rem; }
+        
+        .page-header { text-align: center; margin-bottom: 4rem; animation: slideDown 0.6s ease-out; }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+        .page-header h1 { font-family: 'Orbitron', sans-serif; font-size: 2.5rem; margin-bottom: 1rem; color: #fff; }
+        .page-header p { color: #94a3b8; font-size: 1.1rem; }
+
+        /* Metrics Display */
+        .metrics-card {
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 2rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            overflow: hidden;
+            animation: fadeIn 0.8s ease-out;
+        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .metrics-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 0.5rem;
+            margin-top: 1rem;
+        }
+        .metrics-table th {
+            padding: 1.2rem;
+            text-align: left;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.85rem;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            border-bottom: 1px solid var(--border);
+        }
+        .metrics-table td {
+            padding: 1.2rem;
+            background: rgba(255,255,255,0.02);
+            font-size: 1.1rem;
+            color: #e2e8f0;
+            transition: 0.3s;
+        }
+        .metrics-table tr:hover td {
+            background: rgba(0, 255, 198, 0.05);
+            color: #fff;
+        }
+        .metrics-table td:first-child { border-radius: 12px 0 0 12px; font-weight: 700; color: var(--accent); }
+        .metrics-table td:last-child { border-radius: 0 12px 12px 0; }
+
+        /* Feature Card */
+        .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 4rem; }
+        .info-card { background: rgba(15, 23, 42, 0.5); border: 1px solid var(--border); padding: 2rem; border-radius: 20px; }
+        .info-card h2 { font-family: 'Orbitron', sans-serif; font-size: 1.2rem; margin-bottom: 1rem; color: var(--primary); }
+        .info-card p { font-size: 0.95rem; color: #94a3b8; line-height: 1.6; }
+
+        footer { text-align: center; padding: 4rem; color: #475569; font-size: 0.85rem; }
+    </style>
+</head>
+<body>
+    <div class="bg-layer"></div>
+    <div class="bg-gradient"></div>
+
+    <nav>
+        <a href="userHome" class="logo"><i class="fas fa-bolt"></i> BATTERYOPTIMA</a>
+        <div class="nav-links">
+            <a href="userHome"><i class="fas fa-th-large"></i> Dashboard</a>
+            <a href="training" class="active"><i class="fas fa-microchip"></i> Training</a>
+            <a href="prediction"><i class="fas fa-chart-line"></i> Prediction</a>
+            <a href="log"><i class="fas fa-power-off"></i> Logout</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <header class="page-header">
+            <h1>MODEL ANALYTICS</h1>
+            <p>Comparative performance metrics for active battery health predictive models</p>
+        </header>
+
+        <div class="metrics-card">
+            <table class="metrics-table">
+                <thead>
+                    <tr>
+                        <th>Performance Metric</th>
+                        <th>XGBoost Terminal</th>
+                        <th>LightGBM Core</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in metrics %}
+                    <tr>
+                        <td>{{ row.0 }}</td>
+                        <td>{{ row.1 }}</td>
+                        <td>{{ row.2 }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="info-grid">
+            <div class="info-card">
+                <h2><i class="fas fa-brain"></i> Neural Training</h2>
+                <p>Models are trained on high-fidelity discharge cycle data targeting SOH (State of Health) variance within sub-1% error margins.</p>
+            </div>
+            <div class="info-card">
+                <h2><i class="fas fa-vial"></i> Validation Protocol</h2>
+                <p>K-fold cross-validation ensures operational reliability across diverse environmental conditions and battery chemistries.</p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        © 2026 BATTERYOPTIMA • ANALYTICS MODULE V2.1
+    </footer>
+</body>
+</html>
+
+</html>

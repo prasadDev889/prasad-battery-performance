@@ -1,0 +1,146 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BatteryOptima | User Registration</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00FFC6;
+            --secondary: #10b981;
+            --bg-dark: #020617;
+            --glass: rgba(15, 23, 42, 0.8);
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Rajdhani', sans-serif; background: var(--bg-dark); color: #e2e8f0; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem 0; overflow-x: hidden; }
+
+        /* Background */
+        .bg-layer {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: url("{% static 'images/bg2.jpg' %}") no-repeat center center/cover;
+            filter: brightness(0.3);
+            z-index: -1;
+        }
+
+        .bg-gradient {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, rgba(2, 6, 23, 0.8) 0%, rgba(15, 23, 42, 0.8) 100%);
+            z-index: -1;
+        }
+
+        /* Navbar */
+        nav {
+            position: fixed; top: 0; width: 100%;
+            padding: 1.5rem 5%;
+            display: flex; justify-content: space-between; align-items: center;
+            z-index: 1000;
+        }
+        .logo { font-family: 'Orbitron', sans-serif; font-size: 1.2rem; font-weight: 700; color: var(--primary); text-decoration: none; display: flex; align-items: center; gap: 0.5rem; }
+
+        /* Registration Container */
+        .register-card {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            padding: 2.5rem;
+            border-radius: 24px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.8s ease-out;
+            margin-top: 4rem;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+
+        .register-card h1 { font-family: 'Orbitron', sans-serif; font-size: 1.8rem; margin-bottom: 0.5rem; text-align: center; color: #fff; }
+        .register-card p { color: #94a3b8; text-align: center; margin-bottom: 2rem; font-size: 0.95rem; }
+
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .form-group { margin-bottom: 1.2rem; }
+        .form-group.full { grid-column: span 2; }
+        .form-group label { display: block; color: var(--primary); margin-bottom: 0.4rem; font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; }
+        .form-group input {
+            width: 100%; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border);
+            padding: 0.8rem 1rem; border-radius: 10px; color: #fff; font-size: 0.95rem; transition: 0.3s;
+        }
+        .form-group input:focus { border-color: var(--primary); background: rgba(255, 255, 255, 0.1); outline: none; }
+
+        .btn-register {
+            width: 100%; background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: #000; padding: 1rem; border-radius: 12px; font-weight: 700; font-size: 1rem;
+            cursor: pointer; border: none; font-family: 'Orbitron', sans-serif; transition: 0.3s; margin-top: 1rem;
+        }
+        .btn-register:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0, 255, 198, 0.3); }
+
+        .messages { list-style: none; margin-bottom: 1.5rem; }
+        .messages li { background: rgba(0, 255, 198, 0.1); color: var(--primary); padding: 0.8rem; border-radius: 8px; font-size: 0.85rem; border: 1px solid rgba(0, 255, 198, 0.2); text-align: center; }
+
+        .footer-links { margin-top: 1.5rem; text-align: center; font-size: 0.85rem; color: #94a3b8; }
+        .footer-links a { color: var(--primary); text-decoration: none; font-weight: 600; }
+    </style>
+</head>
+<body>
+    <div class="bg-layer"></div>
+    <div class="bg-gradient"></div>
+
+    <nav>
+        <a href="/" class="logo"><i class="fas fa-bolt"></i> BATTERYOPTIMA</a>
+        <a href="/" style="color: #fff; text-decoration: none; font-size: 0.9rem;"><i class="fas fa-arrow-left"></i> Home</a>
+    </nav>
+
+    <div class="register-card">
+        <h1>INITIALIZE ACCOUNT</h1>
+        <p>Registry deployment for new battery analytics terminal</p>
+
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li><i class="fas fa-check-circle"></i> {{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+
+        <form method="post" action="userRegisterCheck">
+            {% csrf_token %}
+            <div class="form-grid">
+                <div class="form-group full">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" name="name" placeholder="Full legal name" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginId">Login ID</label>
+                    <input type="text" id="loginId" name="loginId" placeholder="User Identifier" required>
+                </div>
+                <div class="form-group">
+                    <label for="mobile">Terminal Contact</label>
+                    <input type="tel" id="mobile" name="mobile" placeholder="Mobile number" required>
+                </div>
+                <div class="form-group full">
+                    <label for="email">Ethernet Email</label>
+                    <input type="email" id="email" name="email" placeholder="active_address@domain.com" required>
+                </div>
+                <div class="form-group full">
+                    <label for="password">Security Key</label>
+                    <input type="password" id="password" name="password" placeholder="••••••••" required>
+                </div>
+            </div>
+            <button type="submit" class="btn-register">DEPLOY ACCOUNT</button>
+        </form>
+
+        <div class="footer-links">
+            Already registered? <a href="userLoginForm">Access Terminal</a>
+        </div>
+    </div>
+</body>
+</html>
+</body>
+
+</html>

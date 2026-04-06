@@ -1,0 +1,164 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BatteryOptima | Registry Management</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00D1FF;
+            --secondary: #0055FF;
+            --danger: #ef4444;
+            --success: #10b981;
+            --bg-dark: #020617;
+            --glass: rgba(15, 23, 42, 0.7);
+            --border: rgba(0, 209, 255, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Rajdhani', sans-serif; background: var(--bg-dark); color: #e2e8f0; min-height: 100vh; }
+
+        /* Background */
+        .bg-layer {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: url("{% static 'images/bg4.jpg' %}") no-repeat center center/cover;
+            filter: brightness(0.2);
+            z-index: -1;
+        }
+
+        .bg-gradient {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to bottom right, rgba(2, 6, 23, 0.8), rgba(15, 23, 42, 0.8));
+            z-index: -1;
+        }
+
+        /* Navbar */
+        nav {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 5%;
+            display: flex; justify-content: space-between; align-items: center;
+            position: sticky; top: 0; z-index: 1000;
+        }
+        .logo { font-family: 'Orbitron', sans-serif; font-size: 1.2rem; font-weight: 700; color: var(--primary); text-decoration: none; display: flex; align-items: center; gap: 0.5rem; }
+        .nav-links { display: flex; gap: 1.5rem; }
+        .nav-links a { color: #94a3b8; text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: 0.3s; display: flex; align-items: center; gap: 0.5rem; }
+        .nav-links a:hover, .nav-links a.active { color: var(--primary); }
+
+        /* Main Container */
+        .container { max-width: 1200px; margin: 4rem auto; padding: 0 2rem; }
+        .header { margin-bottom: 3rem; text-align: left; }
+        .header h1 { font-family: 'Orbitron', sans-serif; font-size: 2rem; color: #fff; margin-bottom: 0.5rem; }
+        .header p { color: #94a3b8; letter-spacing: 1px; }
+
+        /* Table Card */
+        .table-card {
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            overflow: hidden;
+            backdrop-filter: blur(20px);
+        }
+        table { width: 100%; border-collapse: collapse; }
+        thead { background: rgba(0, 209, 255, 0.05); }
+        th {
+            padding: 1.5rem; text-align: left; font-family: 'Orbitron', sans-serif;
+            font-size: 0.8rem; letter-spacing: 1px; color: var(--primary); text-transform: uppercase;
+            border-bottom: 1px solid var(--border);
+        }
+        td { padding: 1.2rem 1.5rem; color: #cbd5e1; border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+        tr:hover td { background: rgba(255, 255, 255, 0.02); }
+
+        /* Status Badge */
+        .status { padding: 0.3rem 0.8rem; border-radius: 6px; font-weight: 700; font-size: 0.8rem; text-transform: uppercase; }
+        .status-active { background: rgba(16, 185, 129, 0.1); color: var(--success); }
+        .status-inactive { background: rgba(239, 68, 68, 0.1); color: var(--danger); }
+
+        /* Buttons */
+        .btn-action {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            padding: 0.5rem 1rem; border-radius: 8px; text-decoration: none;
+            font-weight: 700; font-size: 0.85rem; transition: 0.3s;
+        }
+        .btn-deactivate { background: rgba(239, 68, 68, 0.1); color: var(--danger); border: 1px solid rgba(239, 68, 68, 0.2); }
+        .btn-deactivate:hover { background: var(--danger); color: #fff; }
+        .btn-activate { background: rgba(16, 185, 129, 0.1); color: var(--success); border: 1px solid rgba(16, 185, 129, 0.2); }
+        .btn-activate:hover { background: var(--success); color: #fff; }
+
+        footer { text-align: center; padding: 4rem; color: #475569; font-size: 0.85rem; }
+    </style>
+</head>
+<body>
+    <div class="bg-layer"></div>
+    <div class="bg-gradient"></div>
+
+    <nav>
+        <a href="adminHome" class="logo"><i class="fas fa-shield-alt"></i> ADMIN CORE</a>
+        <div class="nav-links">
+            <a href="adminHome"><i class="fas fa-desktop"></i> Command</a>
+            <a href="userList" class="active"><i class="fas fa-users-cog"></i> Users</a>
+            <a href="log"><i class="fas fa-power-off"></i> Logout</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="header">
+            <h1>REGISTRY MANAGEMENT</h1>
+            <p>Authorized personnel only • Real-time user access control</p>
+        </div>
+
+        <div class="table-card">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Identifier</th>
+                        <th>Full Name</th>
+                        <th>Link/Email</th>
+                        <th>Clearance</th>
+                        <th>Terminal Control</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <td style="color: var(--primary); font-family: 'Orbitron', sans-serif;">#{{ user.id }}</td>
+                        <td>{{ user.loginid }}</td>
+                        <td style="font-weight: 700;">{{ user.name }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>
+                            <span class="status {% if user.status == 'Active' %}status-active{% else %}status-inactive{% endif %}">
+                                {{ user.status }}
+                            </span>
+                        </td>
+                        <td>
+                            {% if user.status == 'Active' %}
+                            <a href="deactivate_user?id={{user.id}}" class="btn-action btn-deactivate">
+                                <i class="fas fa-user-slash"></i> DEACTIVATE
+                            </a>
+                            {% else %}
+                            <a href="activate_user?id={{user.id}}" class="btn-action btn-activate">
+                                <i class="fas fa-user-check"></i> ACTIVATE
+                            </a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <footer>
+        © 2026 BATTERYOPTIMA • REGISTRY SESSION LOCKED
+    </footer>
+</body>
+</html>
+
+</html>

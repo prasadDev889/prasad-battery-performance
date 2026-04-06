@@ -1,0 +1,154 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BatteryOptima | User Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00FFC6;
+            --secondary: #10b981;
+            --accent: #0ea5e9;
+            --bg-dark: #020617;
+            --glass: rgba(15, 23, 42, 0.7);
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Rajdhani', sans-serif; background: var(--bg-dark); color: #e2e8f0; min-height: 100vh; overflow-x: hidden; }
+
+        /* Background */
+        .bg-layer {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: url("{% static 'images/bg3.jpg' %}") no-repeat center center/cover;
+            filter: brightness(0.2);
+            z-index: -1;
+        }
+
+        .bg-gradient {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 10% 20%, rgba(0, 255, 198, 0.05) 0%, transparent 50%),
+                        radial-gradient(circle at 90% 80%, rgba(14, 165, 233, 0.05) 0%, transparent 50%);
+            z-index: -1;
+        }
+
+        /* Navbar */
+        nav {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 5%;
+            display: flex; justify-content: space-between; align-items: center;
+            position: sticky; top: 0; z-index: 1000;
+        }
+        .logo { font-family: 'Orbitron', sans-serif; font-size: 1.2rem; font-weight: 700; color: var(--primary); text-decoration: none; display: flex; align-items: center; gap: 0.5rem; }
+        .nav-links { display: flex; gap: 1.5rem; }
+        .nav-links a { color: #94a3b8; text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: 0.3s; display: flex; align-items: center; gap: 0.5rem; }
+        .nav-links a:hover, .nav-links a.active { color: var(--primary); }
+        .btn-logout { background: rgba(239, 68, 68, 0.1); color: #f87171 !important; padding: 0.4rem 1rem; border-radius: 8px; border: 1px solid rgba(239, 68, 68, 0.2); }
+
+        /* Hero */
+        .hero { padding: 4rem 5%; text-align: center; }
+        .hero h1 { font-family: 'Orbitron', sans-serif; font-size: 3rem; margin-bottom: 1rem; background: linear-gradient(to right, #fff, var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero p { color: #94a3b8; font-size: 1.1rem; max-width: 700px; margin: 0 auto; }
+
+        /* Grid Layout */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 0 5% 5rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .stat-card {
+            background: var(--glass);
+            border: 1px solid var(--border);
+            padding: 2.5rem;
+            border-radius: 24px;
+            transition: 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+        .stat-card:hover { transform: translateY(-5px); border-color: var(--primary); box-shadow: 0 10px 30px rgba(0, 255, 198, 0.1); }
+        .stat-card i { font-size: 2.5rem; color: var(--primary); margin-bottom: 1.5rem; }
+        .stat-card h2 { font-family: 'Orbitron', sans-serif; font-size: 1.4rem; margin-bottom: 1rem; }
+        .stat-card p { color: #94a3b8; line-height: 1.6; font-size: 0.95rem; }
+
+        /* Floating Light */
+        .light { position: absolute; width: 100px; height: 100px; background: var(--primary); filter: blur(60px); opacity: 0.1; top: -20px; right: -20px; }
+
+        footer { text-align: center; padding: 3rem; color: #475569; font-size: 0.85rem; border-top: 1px solid var(--border); }
+    </style>
+</head>
+<body>
+    <div class="bg-layer"></div>
+    <div class="bg-gradient"></div>
+
+    <nav>
+        <a href="userHome" class="logo"><i class="fas fa-bolt"></i> BATTERYOPTIMA</a>
+        <div class="nav-links">
+            <a href="userHome" class="active"><i class="fas fa-th-large"></i> Dashboard</a>
+            <a href="training"><i class="fas fa-microchip"></i> Training</a>
+            <a href="prediction"><i class="fas fa-chart-line"></i> Prediction</a>
+            <a href="log" class="btn-logout"><i class="fas fa-power-off"></i> Logout</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <h1>CONTROL CENTER</h1>
+        <p>Strategic monitoring and AI optimization for your EV power cells</p>
+    </section>
+
+    <div class="dashboard-grid">
+        <div class="stat-card">
+            <div class="light"></div>
+            <i class="fas fa-user-shield"></i>
+            <h2>System Overview</h2>
+            <p>Welcome to the unified analytics terminal. Monitor energy flow, tracking performance metrics across multiple data points with sub-second precision.</p>
+        </div>
+
+        <div class="stat-card">
+            <div class="light" style="background: var(--accent);"></div>
+            <i class="fas fa-battery-three-quarters" style="color: var(--accent);"></i>
+            <h2>Advanced Prediction</h2>
+            <p>Deploy ML models to forecast State of Health (SOH). Our neural networks analyze historical discharge cycles to pinpoint degradation trends.</p>
+        </div>
+
+        <div class="stat-card">
+            <div class="light"></div>
+            <i class="fas fa-sync-alt"></i>
+            <h2>Real-time Sync</h2>
+            <p>Direct integration with vehicle telemetry ensures your optimization strategies are always based on the latest environmental and usage data.</p>
+        </div>
+
+        <div class="stat-card">
+            <div class="light" style="background: var(--accent);"></div>
+            <i class="fas fa-shield-virus" style="color: var(--accent);"></i>
+            <h2>Active Protection</h2>
+            <p>Initialize safety protocols based on predictive insights. Avoid thermal runaway and extend cell longevity through proactive maintenance alerts.</p>
+        </div>
+    </div>
+
+    <footer>
+        © 2026 BATTERYOPTIMA ANALYTICS TERMINAL • SECURE USER SESSION
+    </footer>
+
+    <script>
+        // Active link handling
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            if(link.href === window.location.href) {
+                document.querySelector('.nav-links a.active').classList.remove('active');
+                link.classList.add('active');
+            }
+        });
+    </script>
+</body>
+</html>
+html>
